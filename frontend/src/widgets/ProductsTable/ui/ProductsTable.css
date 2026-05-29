@@ -1,0 +1,132 @@
+.products-table__scroll {
+  overflow-x: auto;
+  margin-top: 0.25rem;
+}
+
+.products-table__native {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.products-table__native thead th {
+  color: var(--kayou-muted);
+  font-weight: 500;
+  text-align: left;
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--kayou-border);
+  background: var(--kayou-panel);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.products-table__native tbody td {
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--kayou-border);
+  vertical-align: middle;
+  color: var(--kayou-text);
+}
+
+.products-table__native tbody tr:hover td {
+  background: rgba(192, 132, 252, 0.06);
+}
+
+.products-table__sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--kayou-muted);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.products-table__sort-btn:hover {
+  color: var(--kayou-accent);
+}
+
+.products-table__image {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--kayou-border);
+  background: var(--kayou-input-bg);
+  display: block;
+}
+
+.products-table__no-image {
+  color: var(--kayou-muted);
+}
+
+.products-table__name-badge {
+  display: inline-block;
+  padding: 0.12rem 0.45rem;
+  border-radius: 6px;
+  background: var(--kayou-accent-dim);
+  color: var(--kayou-accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.products-table__price-link {
+  font-weight: 600;
+  color: var(--kayou-accent);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.products-table__price-link:hover {
+  text-decoration: underline;
+}
+
+.products-table__empty {
+  text-align: center;
+  color: var(--kayou-muted);
+  padding: 2rem 0.5rem !important;
+}
+
+.products-table__actions {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.products-table__action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--kayou-border);
+  border-radius: var(--kayou-radius-sm);
+  background: var(--kayou-input-bg);
+  color: var(--kayou-muted);
+  cursor: pointer;
+}
+
+.products-table__action-btn:hover:not(:disabled) {
+  color: var(--kayou-accent);
+  border-color: var(--kayou-accent);
+}
+
+.products-table__action-btn--danger:hover:not(:disabled) {
+  color: #f87171;
+  border-color: #f87171;
+}
+
+.products-table__action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.products-table__pagination {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+}
