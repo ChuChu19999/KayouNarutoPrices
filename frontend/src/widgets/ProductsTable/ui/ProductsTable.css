@@ -125,8 +125,9 @@
   cursor: not-allowed;
 }
 
-.products-table__pagination {
-  margin-top: 0.75rem;
-  display: flex;
-  justify-content: flex-end;
+.products-table__total {
+  margin: 0.75rem 0 0;
+  text-align: right;
+  font-size: 0.875rem;
+  color: #94a3b8;
 }

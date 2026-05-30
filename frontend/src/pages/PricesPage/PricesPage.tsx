@@ -17,10 +17,10 @@ import type { Product, ProductPayload } from '../../shared/api';
 import './PricesPage.css';
 
 const PricesPage = () => {
-  const { page, pageSize, filters, sorting, setPage, setPageSize, setFilters, setSorting } =
-    useProductsQueryStore();
+  const { filters, sorting, setFilters, setSorting } = useProductsQueryStore();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [formSession, setFormSession] = useState(0);
   const [modalMode, setModalMode] = useState<ProductFormMode>('create');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -30,16 +30,12 @@ const PricesPage = () => {
   const deleteMutation = useDeleteProductMutation();
 
   useUrlSync(
-    { filterKeys: ['search'], defaultPage: 1, defaultPageSize: 20 },
+    { filterKeys: ['search'] },
     {
-      page,
-      pageSize,
       filters: filters as Record<string, unknown> | undefined,
       sorting: sorting ? { sort_by: sorting.sortBy, sort_order: sorting.sortOrder } : undefined,
     },
     {
-      setPage,
-      setPageSize,
       setFilters: value => {
         if (!value) {
           setFilters(undefined);
@@ -64,8 +60,6 @@ const PricesPage = () => {
   );
 
   const { data, isLoading, isFetching, error } = useProductsQuery({
-    page,
-    pageSize,
     filters,
     sorting,
   });
@@ -73,18 +67,19 @@ const PricesPage = () => {
   const handleReset = useCallback(() => {
     setFilters(undefined);
     setSorting(undefined);
-    setPage(1);
-  }, [setFilters, setSorting, setPage]);
+  }, [setFilters, setSorting]);
 
   const openCreateModal = useCallback(() => {
     setModalMode('create');
     setEditingProduct(null);
+    setFormSession(session => session + 1);
     setModalOpen(true);
   }, []);
 
   const openEditModal = useCallback((product: Product) => {
     setModalMode('edit');
     setEditingProduct(product);
+    setFormSession(session => session + 1);
     setModalOpen(true);
   }, []);
 
@@ -181,16 +176,11 @@ const PricesPage = () => {
             </p>
           ) : (
             <ProductsTable
-              items={data?.items ?? []}
-              total={data?.total ?? 0}
-              page={page}
-              pageSize={pageSize}
+              items={data ?? []}
               loading={isLoading || isFetching}
               sortBy={sorting?.sortBy}
               sortOrder={sorting?.sortOrder}
               deleteLoadingId={deletingId}
-              onPageChange={setPage}
-              onPageSizeChange={setPageSize}
               onSortChange={(sortBy, sortOrder) =>
                 setSorting({ sortBy: sortBy as 'name' | 'price' | 'id', sortOrder })
               }
@@ -203,6 +193,7 @@ const PricesPage = () => {
 
       <ProductFormModal
         open={modalOpen}
+        formSession={formSession}
         mode={modalMode}
         product={editingProduct}
         loading={formLoading}

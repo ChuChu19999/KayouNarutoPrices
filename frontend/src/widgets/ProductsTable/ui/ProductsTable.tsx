@@ -5,7 +5,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Pagination, Popconfirm, Spin } from 'antd';
+import { Popconfirm, Spin } from 'antd';
 import { BiDownArrow, BiEdit, BiTrash, BiUpArrow } from 'react-icons/bi';
 import { getProductImageSrc } from '../../../shared/api/products';
 import type { Product } from '../../../shared/api/products';
@@ -15,15 +15,10 @@ const columnHelper = createColumnHelper<Product>();
 
 interface ProductsTableProps {
   items: Product[];
-  total: number;
-  page: number;
-  pageSize: number;
   loading: boolean;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
   deleteLoadingId?: number | null;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (pageSize: number) => void;
   onSortChange: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
   onEdit: (product: Product) => void;
   onDelete: (product: Product) => void;
@@ -46,15 +41,10 @@ const sortableColumns: Record<string, string> = {
 
 export const ProductsTable = ({
   items,
-  total,
-  page,
-  pageSize,
   loading,
   sortBy,
   sortOrder,
   deleteLoadingId,
-  onPageChange,
-  onPageSizeChange,
   onSortChange,
   onEdit,
   onDelete,
@@ -211,20 +201,9 @@ export const ProductsTable = ({
           </table>
         </div>
       </Spin>
-      <div className="products-table__pagination">
-        <Pagination
-          current={page}
-          pageSize={pageSize}
-          total={total}
-          showSizeChanger
-          pageSizeOptions={[10, 20, 50]}
-          showTotal={t => `Всего: ${t}`}
-          onChange={(p, ps) => {
-            if (ps !== pageSize) onPageSizeChange(ps);
-            else onPageChange(p);
-          }}
-        />
-      </div>
+      {!loading && items.length > 0 && (
+        <p className="products-table__total">Всего: {items.length}</p>
+      )}
     </div>
   );
 };

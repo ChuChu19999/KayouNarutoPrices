@@ -10,14 +10,6 @@ export interface Product {
   imageUrl: string | null;
 }
 
-export interface PaginatedProducts {
-  items: Product[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-}
-
 export interface ProductsFilters {
   search?: string;
 }
@@ -30,8 +22,6 @@ export interface ProductsSorting {
 }
 
 export interface ProductsListParams {
-  page: number;
-  pageSize: number;
   sortBy?: ProductsSortField;
   sortOrder?: ProductsSorting['sortOrder'];
   search?: string;
@@ -67,11 +57,9 @@ const buildProductFormData = (payload: ProductPayload, requireImage: boolean): F
 };
 
 export const productsApi = {
-  list: async (params: ProductsListParams): Promise<PaginatedProducts> => {
-    const { data } = await axiosInstance.get<PaginatedProducts>('/api/products/', {
+  list: async (params: ProductsListParams): Promise<Product[]> => {
+    const { data } = await axiosInstance.get<Product[]>('/api/products/', {
       params: {
-        page: params.page,
-        pageSize: params.pageSize,
         sortBy: params.sortBy,
         sortOrder: params.sortOrder,
         search: params.search,

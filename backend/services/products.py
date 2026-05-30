@@ -1,6 +1,6 @@
 from decimal import Decimal
 from typing import Optional
-from sqlalchemy import Select, func, select
+from sqlalchemy import Select, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from core.exceptions import NotFoundError
@@ -8,11 +8,6 @@ from models.product import Product
 from models.product_image import ProductImage
 from schemas.product import ProductCreate, ProductResponse, ProductUpdate
 from utils.filters import add_text_search_filter
-from utils.pagination import (
-    apply_pagination,
-    calculate_total_pages,
-    get_total_count,
-)
 
 ALLOWED_SORT_FIELDS = {
     "name": Product.name,
@@ -39,43 +34,26 @@ def to_product_response(product: Product) -> ProductResponse:
 async def list_products(
     db: AsyncSession,
     *,
-    page: int,
-    page_size: int,
     sort_by: Optional[str],
     sort_order: Optional[str],
     search: Optional[str],
-) -> tuple[list[Product], int]:
-    """Список продуктов с пагинацией, сортировкой и поиском по наименованию."""
+) -> list[Product]:
+    """Полный список продуктов с сортировкой и поиском по наименованию."""
     conditions: list = []
     add_text_search_filter(conditions, search, Product.name)
 
-    base_query: Select = select(Product).options(*_PRODUCT_LOAD_OPTIONS)
+    query: Select = select(Product).options(*_PRODUCT_LOAD_OPTIONS)
     if conditions:
-        base_query = base_query.where(*conditions)
-
-    count_query = select(func.count()).select_from(base_query.subquery())
-    total = await get_total_count(db, count_query)
+        query = query.where(*conditions)
 
     sort_column = ALLOWED_SORT_FIELDS.get(sort_by or "name", Product.name)
     if sort_order == "asc":
-        base_query = base_query.order_by(sort_column.asc())
+        query = query.order_by(sort_column.asc())
     else:
-        base_query = base_query.order_by(sort_column.desc())
+        query = query.order_by(sort_column.desc())
 
-    query = apply_pagination(base_query, page, page_size)
     result = await db.execute(query)
-    items = list(result.scalars().unique().all())
-    return items, total
-
-
-def build_paginated_meta(total: int, page: int, page_size: int) -> dict:
-    """Метаданные пагинации для ответа."""
-    return {
-        "total": total,
-        "page": page,
-        "page_size": page_size,
-        "total_pages": calculate_total_pages(total, page_size),
-    }
+    return list(result.scalars().unique().all())
 
 
 async def get_product_by_id(db: AsyncSession, product_id: int) -> Product:

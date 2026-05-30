@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { message } from 'antd';
 import { getApiErrorMessage } from '../lib/getApiErrorMessage';
 import { productsApi } from './products';
-import type { ProductPayload } from './products';
+import type { Product, ProductPayload } from './products';
 
 export const useCreateProductMutation = () => {
   const queryClient = useQueryClient();
@@ -25,7 +25,13 @@ export const useUpdateProductMutation = () => {
   return useMutation({
     mutationFn: ({ id, payload }: { id: number; payload: ProductPayload }) =>
       productsApi.update(id, payload),
-    onSuccess: () => {
+    onSuccess: updatedProduct => {
+      queryClient.setQueriesData<Product[]>({ queryKey: ['products'] }, old => {
+        if (!old) {
+          return old;
+        }
+        return old.map(item => (item.id === updatedProduct.id ? updatedProduct : item));
+      });
       void queryClient.invalidateQueries({ queryKey: ['products'] });
       message.success('Продукт обновлён');
     },

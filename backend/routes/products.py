@@ -3,10 +3,8 @@ from typing import Optional
 from fastapi import APIRouter, Depends, File, Form, Query, Response, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database import get_db
-from schemas.pagination import PaginatedResponse
 from schemas.product import ProductCreate, ProductResponse, ProductUpdate
 from services.products import (
-    build_paginated_meta,
     create_product,
     delete_product,
     get_product_image_row,
@@ -21,15 +19,11 @@ router = APIRouter()
 
 @router.get(
     "/",
-    response_model=PaginatedResponse[ProductResponse],
+    response_model=list[ProductResponse],
     summary="Список продуктов Kayou Naruto",
-    description="Каталог с пагинацией, сортировкой (name, price, id) и поиском по наименованию.",
+    description="Полный каталог с сортировкой (name, price, id) и поиском по наименованию.",
 )
 async def get_products(
-    page: int = Query(1, ge=1, description="Номер страницы"),
-    page_size: int = Query(
-        20, ge=1, le=100, alias="pageSize", description="Размер страницы"
-    ),
     sort_by: Optional[str] = Query(
         "name", alias="sortBy", description="Поле сортировки: name, price, id"
     ),
@@ -42,19 +36,13 @@ async def get_products(
     db: AsyncSession = Depends(get_db),
 ):
     """Каталог продуктов для таблицы на фронтенде."""
-    items, total = await list_products(
+    items = await list_products(
         db,
-        page=page,
-        page_size=page_size,
         sort_by=sort_by,
         sort_order=sort_order,
         search=search,
     )
-    meta = build_paginated_meta(total, page, page_size)
-    return PaginatedResponse[ProductResponse](
-        items=[to_product_response(p) for p in items],
-        **meta,
-    )
+    return [to_product_response(product) for product in items]
 
 
 @router.get(

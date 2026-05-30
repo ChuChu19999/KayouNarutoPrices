@@ -3,8 +3,6 @@
  */
 
 export interface UrlQueryParams {
-  page?: number;
-  pageSize?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
   [key: string]: string | number | string[] | undefined;
@@ -54,22 +52,6 @@ export function urlParamsToFilters(
   });
 
   return filters;
-}
-
-/**
- * Получение параметров пагинации из URL
- */
-export function getPaginationFromUrl(searchParams: URLSearchParams): {
-  page: number;
-  pageSize: number;
-} {
-  const page = parseInt(searchParams.get('page') || '1', 10);
-  const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
-
-  return {
-    page: isNaN(page) || page < 1 ? 1 : page,
-    pageSize: isNaN(pageSize) || pageSize < 1 ? 20 : pageSize,
-  };
 }
 
 /**

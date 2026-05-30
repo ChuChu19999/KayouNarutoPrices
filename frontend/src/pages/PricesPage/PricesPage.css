@@ -134,35 +134,6 @@
   font-size: 0.9rem;
 }
 
-.prices-page .ant-pagination {
-  color: var(--kayou-muted);
-}
-
-.prices-page .ant-pagination-item {
-  background: var(--kayou-input-bg);
-  border-color: var(--kayou-border);
-}
-
-.prices-page .ant-pagination-item a {
-  color: var(--kayou-text);
-}
-
-.prices-page .ant-pagination-item-active {
-  border-color: var(--kayou-accent);
-  background: var(--kayou-accent-dim);
-}
-
-.prices-page .ant-pagination-item-active a {
-  color: var(--kayou-accent);
-}
-
-.prices-page .ant-pagination-prev .ant-pagination-item-link,
-.prices-page .ant-pagination-next .ant-pagination-item-link {
-  background: var(--kayou-input-bg);
-  border-color: var(--kayou-border);
-  color: var(--kayou-text);
-}
-
 .prices-page .ant-select-selector {
   background: var(--kayou-input-bg) !important;
   border-color: var(--kayou-border) !important;
