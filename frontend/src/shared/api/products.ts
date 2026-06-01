@@ -21,6 +21,12 @@ export interface ProductsSorting {
   sortOrder?: 'asc' | 'desc';
 }
 
+export interface ProductsList {
+  items: Product[];
+  total: number;
+  totalSum: string;
+}
+
 export interface ProductsListParams {
   sortBy?: ProductsSortField;
   sortOrder?: ProductsSorting['sortOrder'];
@@ -57,8 +63,8 @@ const buildProductFormData = (payload: ProductPayload, requireImage: boolean): F
 };
 
 export const productsApi = {
-  list: async (params: ProductsListParams): Promise<Product[]> => {
-    const { data } = await axiosInstance.get<Product[]>('/api/products/', {
+  list: async (params: ProductsListParams): Promise<ProductsList> => {
+    const { data } = await axiosInstance.get<ProductsList>('/api/products/', {
       params: {
         sortBy: params.sortBy,
         sortOrder: params.sortOrder,

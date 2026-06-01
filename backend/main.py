@@ -26,8 +26,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Kayou Naruto Prices API",
-    description="Каталог цен продуктов Kayou Naruto",
+    title="Товары и цены API",
+    description="API для личной таблицы товаров с ценами и ссылками",
     version="1.0.0",
     lifespan=lifespan,
     docs_url=None,

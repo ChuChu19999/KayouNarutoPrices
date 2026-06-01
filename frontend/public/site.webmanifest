@@ -1,7 +1,7 @@
 {
-  "name": "Kayou Naruto — каталог цен",
-  "short_name": "Kayou Naruto",
-  "description": "Каталог цен на карточные продукты Kayou Naruto",
+  "name": "Товары и цены",
+  "short_name": "Товары",
+  "description": "Личная таблица товаров с ценами и ссылками",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#15161a",

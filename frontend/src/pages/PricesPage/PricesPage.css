@@ -1,26 +1,26 @@
 .prices-page {
   min-height: 100vh;
-  background: var(--kayou-bg);
-  color: var(--kayou-text);
+  background: var(--app-bg);
+  color: var(--app-text);
 }
 
 .prices-page__header {
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--kayou-border);
-  background: var(--kayou-header-gradient);
+  border-bottom: 1px solid var(--app-border);
+  background: var(--app-header-gradient);
 }
 
 .prices-page__title {
   margin: 0 0 0.35rem;
   font-size: 1.35rem;
   font-weight: 600;
-  color: var(--kayou-text);
+  color: var(--app-text);
 }
 
 .prices-page__subtitle {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--kayou-muted);
+  color: var(--app-muted);
   max-width: 52rem;
 }
 
@@ -31,9 +31,9 @@
 }
 
 .prices-page__panel {
-  background: var(--kayou-panel);
-  border: 1px solid var(--kayou-border);
-  border-radius: var(--kayou-radius);
+  background: var(--app-panel);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
   padding: 1rem;
 }
 
@@ -41,7 +41,7 @@
   margin: 0 0 0.75rem;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--kayou-text);
+  color: var(--app-text);
 }
 
 .prices-page__toolbar {
@@ -60,12 +60,12 @@
 }
 
 .prices-page__add.ant-btn-primary {
-  background: var(--kayou-accent);
-  border-color: var(--kayou-accent);
+  background: var(--app-accent);
+  border-color: var(--app-accent);
   color: #15161a;
   font-weight: 600;
   height: 32px;
-  border-radius: var(--kayou-radius-sm);
+  border-radius: var(--app-radius-sm);
 }
 
 .prices-page__add.ant-btn-primary:hover {
@@ -83,48 +83,48 @@
   display: block;
   margin-bottom: 0.35rem;
   font-size: 0.85rem;
-  color: var(--kayou-muted);
+  color: var(--app-muted);
 }
 
 .prices-page__search.ant-input-search .ant-input {
-  background: var(--kayou-input-bg);
-  border-color: var(--kayou-border);
-  color: var(--kayou-text);
-  border-radius: var(--kayou-radius-sm);
+  background: var(--app-input-bg);
+  border-color: var(--app-border);
+  color: var(--app-text);
+  border-radius: var(--app-radius-sm);
   font-size: 0.9rem;
 }
 
 .prices-page__search.ant-input-search .ant-input::placeholder {
-  color: var(--kayou-muted);
+  color: var(--app-muted);
 }
 
 .prices-page__search.ant-input-search .ant-input:hover,
 .prices-page__search.ant-input-search .ant-input:focus {
-  border-color: var(--kayou-accent);
+  border-color: var(--app-accent);
 }
 
 .prices-page__search.ant-input-search .ant-input-search-button {
-  background: var(--kayou-input-bg);
-  border-color: var(--kayou-border);
-  color: var(--kayou-muted);
+  background: var(--app-input-bg);
+  border-color: var(--app-border);
+  color: var(--app-muted);
 }
 
 .prices-page__search.ant-input-search .ant-input-search-button:hover {
-  color: var(--kayou-accent);
-  border-color: var(--kayou-accent);
+  color: var(--app-accent);
+  border-color: var(--app-accent);
 }
 
 .prices-page__reset .ant-btn {
-  background: var(--kayou-input-bg);
-  border-color: var(--kayou-border);
-  color: var(--kayou-text);
-  border-radius: var(--kayou-radius-sm);
+  background: var(--app-input-bg);
+  border-color: var(--app-border);
+  color: var(--app-text);
+  border-radius: var(--app-radius-sm);
   height: 32px;
 }
 
 .prices-page__reset .ant-btn:hover {
-  color: var(--kayou-accent);
-  border-color: var(--kayou-accent);
+  color: var(--app-accent);
+  border-color: var(--app-accent);
 }
 
 .prices-page__error {
@@ -135,11 +135,11 @@
 }
 
 .prices-page .ant-select-selector {
-  background: var(--kayou-input-bg) !important;
-  border-color: var(--kayou-border) !important;
-  color: var(--kayou-text) !important;
+  background: var(--app-input-bg) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
 }
 
 .prices-page .ant-spin-dot-item {
-  background-color: var(--kayou-accent);
+  background-color: var(--app-accent);
 }

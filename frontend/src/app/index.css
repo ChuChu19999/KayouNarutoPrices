@@ -1,15 +1,15 @@
 :root {
-  --kayou-bg: #15161a;
-  --kayou-panel: #1e2026;
-  --kayou-text: #e8eaef;
-  --kayou-muted: #8b919d;
-  --kayou-accent: #c084fc;
-  --kayou-accent-dim: rgba(192, 132, 252, 0.15);
-  --kayou-border: #2d3139;
-  --kayou-input-bg: #12141a;
-  --kayou-header-gradient: linear-gradient(135deg, #1a1525 0%, #15161a 50%);
-  --kayou-radius: 12px;
-  --kayou-radius-sm: 8px;
+  --app-bg: #15161a;
+  --app-panel: #1e2026;
+  --app-text: #e8eaef;
+  --app-muted: #8b919d;
+  --app-accent: #c084fc;
+  --app-accent-dim: rgba(192, 132, 252, 0.15);
+  --app-border: #2d3139;
+  --app-input-bg: #12141a;
+  --app-header-gradient: linear-gradient(135deg, #1a1525 0%, #15161a 50%);
+  --app-radius: 12px;
+  --app-radius-sm: 8px;
   font-family:
     'Segoe UI',
     system-ui,
@@ -17,8 +17,8 @@
     sans-serif;
   line-height: 1.45;
   font-weight: 400;
-  color: var(--kayou-text);
-  background: var(--kayou-bg);
+  color: var(--app-text);
+  background: var(--app-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -34,8 +34,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   font-family: inherit;
-  background: var(--kayou-bg);
-  color: var(--kayou-text);
+  background: var(--app-bg);
+  color: var(--app-text);
 }
 
 #root {
@@ -44,7 +44,7 @@ body {
 }
 
 a {
-  color: var(--kayou-accent);
+  color: var(--app-accent);
   text-decoration: none;
 }
 

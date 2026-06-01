@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { message } from 'antd';
 import { getApiErrorMessage } from '../lib/getApiErrorMessage';
 import { productsApi } from './products';
-import type { Product, ProductPayload } from './products';
+import type { ProductPayload } from './products';
 
 export const useCreateProductMutation = () => {
   const queryClient = useQueryClient();
@@ -11,10 +11,10 @@ export const useCreateProductMutation = () => {
     mutationFn: (payload: ProductPayload) => productsApi.create(payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['products'] });
-      message.success('Продукт добавлен');
+      message.success('Товар добавлен');
     },
     onError: error => {
-      message.error(getApiErrorMessage(error, 'Не удалось добавить продукт'));
+      message.error(getApiErrorMessage(error, 'Не удалось добавить товар'));
     },
   });
 };
@@ -25,18 +25,12 @@ export const useUpdateProductMutation = () => {
   return useMutation({
     mutationFn: ({ id, payload }: { id: number; payload: ProductPayload }) =>
       productsApi.update(id, payload),
-    onSuccess: updatedProduct => {
-      queryClient.setQueriesData<Product[]>({ queryKey: ['products'] }, old => {
-        if (!old) {
-          return old;
-        }
-        return old.map(item => (item.id === updatedProduct.id ? updatedProduct : item));
-      });
+    onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['products'] });
-      message.success('Продукт обновлён');
+      message.success('Товар обновлён');
     },
     onError: error => {
-      message.error(getApiErrorMessage(error, 'Не удалось обновить продукт'));
+      message.error(getApiErrorMessage(error, 'Не удалось обновить товар'));
     },
   });
 };
@@ -48,10 +42,10 @@ export const useDeleteProductMutation = () => {
     mutationFn: (id: number) => productsApi.remove(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['products'] });
-      message.success('Продукт удалён');
+      message.success('Товар удалён');
     },
     onError: error => {
-      message.error(getApiErrorMessage(error, 'Не удалось удалить продукт'));
+      message.error(getApiErrorMessage(error, 'Не удалось удалить товар'));
     },
   });
 };

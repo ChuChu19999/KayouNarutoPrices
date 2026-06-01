@@ -1,6 +1,6 @@
 from decimal import Decimal
 from typing import Optional
-from sqlalchemy import Select, select
+from sqlalchemy import Select, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from core.exceptions import NotFoundError
@@ -31,16 +31,33 @@ def to_product_response(product: Product) -> ProductResponse:
     )
 
 
+def _build_product_filters(search: Optional[str]) -> list:
+    """Условия выборки по наименованию."""
+    conditions: list = []
+    add_text_search_filter(conditions, search, Product.name)
+    return conditions
+
+
 async def list_products(
     db: AsyncSession,
     *,
     sort_by: Optional[str],
     sort_order: Optional[str],
     search: Optional[str],
-) -> list[Product]:
-    """Полный список продуктов с сортировкой и поиском по наименованию."""
-    conditions: list = []
-    add_text_search_filter(conditions, search, Product.name)
+) -> tuple[list[Product], int, Decimal]:
+    """Полный список товаров с итогами, сортировкой и поиском по наименованию."""
+    conditions = _build_product_filters(search)
+
+    aggregate_query = select(
+        func.count(Product.id),
+        func.coalesce(func.sum(Product.price), 0),
+    )
+    if conditions:
+        aggregate_query = aggregate_query.where(*conditions)
+
+    aggregate_result = await db.execute(aggregate_query)
+    total, total_sum = aggregate_result.one()
+    total_sum = Decimal(str(total_sum))
 
     query: Select = select(Product).options(*_PRODUCT_LOAD_OPTIONS)
     if conditions:
@@ -53,7 +70,8 @@ async def list_products(
         query = query.order_by(sort_column.desc())
 
     result = await db.execute(query)
-    return list(result.scalars().unique().all())
+    items = list(result.scalars().unique().all())
+    return items, int(total), total_sum
 
 
 async def get_product_by_id(db: AsyncSession, product_id: int) -> Product:
@@ -63,7 +81,7 @@ async def get_product_by_id(db: AsyncSession, product_id: int) -> Product:
     )
     product = result.scalar_one_or_none()
     if product is None:
-        raise NotFoundError("Продукт не найден")
+        raise NotFoundError("Товар не найден")
     return product
 
 
@@ -110,7 +128,7 @@ async def create_product(
     image_content: bytes,
     content_type: str,
 ) -> Product:
-    """Добавление продукта в каталог с изображением."""
+    """Добавление товара в таблицу с изображением."""
     product = Product(
         name=payload.name,
         price=Decimal(payload.price),

@@ -56,9 +56,15 @@ def setup_logger():
     logging.basicConfig(handlers=[InterceptHandler()], level=0, force=True)
 
     # Отключаем логирование для некоторых библиотек
-    for logger_name in ["uvicorn.access", "uvicorn.error"]:
+    for logger_name in [
+        "uvicorn.access",
+        "uvicorn.error",
+        "httpx",
+        "httpcore",
+    ]:
         logging_logger = logging.getLogger(logger_name)
         logging_logger.handlers = [InterceptHandler()]
+        logging_logger.setLevel(logging.WARNING)
 
     # Добавляем logger в builtins для глобального доступа
     builtins.logger = logger  # type: ignore[assignment]

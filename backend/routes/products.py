@@ -3,7 +3,12 @@ from typing import Optional
 from fastapi import APIRouter, Depends, File, Form, Query, Response, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database import get_db
-from schemas.product import ProductCreate, ProductResponse, ProductUpdate
+from schemas.product import (
+    ProductCreate,
+    ProductResponse,
+    ProductsListResponse,
+    ProductUpdate,
+)
 from services.products import (
     create_product,
     delete_product,
@@ -19,9 +24,9 @@ router = APIRouter()
 
 @router.get(
     "/",
-    response_model=list[ProductResponse],
-    summary="Список продуктов Kayou Naruto",
-    description="Полный каталог с сортировкой (name, price, id) и поиском по наименованию.",
+    response_model=ProductsListResponse,
+    summary="Список товаров",
+    description="Таблица товаров с сортировкой (name, price, id), поиском и итоговой суммой цен.",
 )
 async def get_products(
     sort_by: Optional[str] = Query(
@@ -35,19 +40,23 @@ async def get_products(
     ),
     db: AsyncSession = Depends(get_db),
 ):
-    """Каталог продуктов для таблицы на фронтенде."""
-    items = await list_products(
+    """Список товаров для таблицы на фронтенде."""
+    items, total, total_sum = await list_products(
         db,
         sort_by=sort_by,
         sort_order=sort_order,
         search=search,
     )
-    return [to_product_response(product) for product in items]
+    return ProductsListResponse(
+        items=[to_product_response(product) for product in items],
+        total=total,
+        total_sum=total_sum,
+    )
 
 
 @router.get(
     "/{product_id}/image",
-    summary="Изображение продукта",
+    summary="Изображение товара",
     responses={
         200: {"content": {"image/*": {}}},
         404: {"description": "Изображение не найдено"},
@@ -70,7 +79,7 @@ async def get_product_image(
     "/",
     response_model=ProductResponse,
     status_code=201,
-    summary="Добавить продукт",
+    summary="Добавить товар",
 )
 async def post_product(
     name: str = Form(..., min_length=1, max_length=20),
@@ -79,7 +88,7 @@ async def post_product(
     image: UploadFile = File(..., description="Файл изображения"),
     db: AsyncSession = Depends(get_db),
 ):
-    """Создание записи в каталоге с загрузкой изображения (multipart)."""
+    """Создание товара с загрузкой изображения (multipart)."""
     image_content, content_type = await read_image_upload(image)
     payload = ProductCreate.model_validate(
         {"name": name, "price": price, "productUrl": product_url}
@@ -96,7 +105,7 @@ async def post_product(
 @router.patch(
     "/{product_id}",
     response_model=ProductResponse,
-    summary="Изменить продукт",
+    summary="Изменить товар",
 )
 async def patch_product(
     product_id: int,
@@ -128,13 +137,13 @@ async def patch_product(
 @router.delete(
     "/{product_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    summary="Удалить продукт",
-    description="Физическое удаление продукта и изображения из базы данных.",
+    summary="Удалить товар",
+    description="Физическое удаление товара и изображения из базы данных.",
 )
 async def remove_product(
     product_id: int,
     db: AsyncSession = Depends(get_db),
 ):
-    """Безвозвратное удаление продукта."""
+    """Безвозвратное удаление товара."""
     await delete_product(db, product_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)

@@ -127,17 +127,17 @@ const PricesPage = () => {
   return (
     <div className="prices-page">
       <Helmet>
-        <title>Kayou Naruto — каталог цен</title>
+        <title>Товары и цены</title>
       </Helmet>
 
       <header className="prices-page__header">
-        <h1 className="prices-page__title">Kayou Naruto</h1>
-        <p className="prices-page__subtitle">Каталог цен на карточные продукты</p>
+        <h1 className="prices-page__title">Товары и цены</h1>
+        <p className="prices-page__subtitle">Таблица с наименованием, ценой и ссылкой</p>
       </header>
 
       <main className="prices-page__main">
         <section className="prices-page__panel">
-          <h2 className="prices-page__panel-title">Каталог</h2>
+          <h2 className="prices-page__panel-title">Товары</h2>
 
           <div className="prices-page__toolbar">
             <div className="prices-page__search-wrap">
@@ -172,11 +172,13 @@ const PricesPage = () => {
 
           {error ? (
             <p className="prices-page__error">
-              Не удалось загрузить каталог. Проверьте API и базу данных.
+              Не удалось загрузить товары. Проверьте API и базу данных.
             </p>
           ) : (
             <ProductsTable
-              items={data ?? []}
+              items={data?.items ?? []}
+              total={data?.total ?? 0}
+              totalSum={data?.totalSum ?? '0'}
               loading={isLoading || isFetching}
               sortBy={sorting?.sortBy}
               sortOrder={sorting?.sortOrder}

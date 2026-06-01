@@ -3,6 +3,7 @@ export {
   getProductImageSrc,
   type Product,
   type ProductPayload,
+  type ProductsList,
   type ProductsFilters,
   type ProductsSorting,
   type ProductsSortField,

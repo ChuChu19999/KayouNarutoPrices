@@ -21,7 +21,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const kayouTheme = {
+const appTheme = {
   algorithm: theme.darkAlgorithm,
   token: {
     colorPrimary: '#c084fc',
@@ -69,7 +69,7 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ConfigProvider locale={ruRU} theme={kayouTheme}>
+      <ConfigProvider locale={ruRU} theme={appTheme}>
         <AntApp>
           <BrowserRouter basename={BASE_PATH}>
             <Routes>

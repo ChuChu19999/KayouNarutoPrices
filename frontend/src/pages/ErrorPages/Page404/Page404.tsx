@@ -5,11 +5,11 @@ import './Page404.css';
 const Page404 = () => (
   <div className="page404">
     <Helmet>
-      <title>Ошибка 404 — Kayou Naruto</title>
+      <title>Ошибка 404 — Товары и цены</title>
     </Helmet>
     <header className="page404__header">
       <h1>Ошибка 404</h1>
-      <p>Страница не найдена. Вернитесь в каталог.</p>
+      <p>Страница не найдена. Вернитесь к таблице товаров.</p>
       <Link to="/" className="page404__link">
         На главную
       </Link>

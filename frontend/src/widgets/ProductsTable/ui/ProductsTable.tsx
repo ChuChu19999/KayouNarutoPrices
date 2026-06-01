@@ -15,6 +15,8 @@ const columnHelper = createColumnHelper<Product>();
 
 interface ProductsTableProps {
   items: Product[];
+  total: number;
+  totalSum: string;
   loading: boolean;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
@@ -41,6 +43,8 @@ const sortableColumns: Record<string, string> = {
 
 export const ProductsTable = ({
   items,
+  total,
+  totalSum,
   loading,
   sortBy,
   sortOrder,
@@ -81,7 +85,7 @@ export const ProductsTable = ({
             target="_blank"
             rel="noopener noreferrer"
             className="products-table__price-link"
-            title="Открыть страницу продукта"
+            title="Открыть страницу товара"
           >
             {formatPrice(info.getValue())}
           </a>
@@ -104,7 +108,7 @@ export const ProductsTable = ({
                 <BiEdit size={18} />
               </button>
               <Popconfirm
-                title="Удалить продукт?"
+                title="Удалить товар?"
                 description="Запись будет удалена из базы без возможности восстановления."
                 okText="Удалить"
                 cancelText="Отмена"
@@ -193,7 +197,7 @@ export const ProductsTable = ({
               {!loading && items.length === 0 && (
                 <tr>
                   <td colSpan={columns.length} className="products-table__empty">
-                    Нет продуктов в каталоге
+                    Нет товаров в таблице
                   </td>
                 </tr>
               )}
@@ -201,8 +205,14 @@ export const ProductsTable = ({
           </table>
         </div>
       </Spin>
-      {!loading && items.length > 0 && (
-        <p className="products-table__total">Всего: {items.length}</p>
+      {!loading && (
+        <p className="products-table__footer">
+          <span>Всего: {total}</span>
+          <span className="products-table__footer-sep" aria-hidden>
+            ·
+          </span>
+          <span>Сумма: {formatPrice(totalSum)}</span>
+        </p>
       )}
     </div>
   );

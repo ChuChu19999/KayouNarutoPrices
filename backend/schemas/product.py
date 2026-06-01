@@ -16,6 +16,16 @@ class ProductResponse(BaseModel):
     image_url: Optional[str] = Field(None, serialization_alias="imageUrl")
 
 
+class ProductsListResponse(BaseModel):
+    """Список товаров с итогами для таблицы."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    items: list[ProductResponse]
+    total: int
+    total_sum: Decimal = Field(..., serialization_alias="totalSum")
+
+
 class ProductCreate(BaseModel):
     """Поля продукта без изображения (файл передаётся отдельно в multipart)."""
 

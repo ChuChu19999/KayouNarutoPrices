@@ -1,9 +1,10 @@
--- Таблица цен продуктов Kayou Naruto
--- Выполните в своей схеме PostgreSQL (при необходимости замените kayou_naruto)
+-- Схема БД: товары, цены, изображения
+-- Выполните в PostgreSQL (при необходимости замените имя схемы products_list)
+-- Подходит для новой базы и для обновления со старой версии (колонка products.image_url)
 
-CREATE SCHEMA IF NOT EXISTS kayou_naruto;
+CREATE SCHEMA IF NOT EXISTS products_list;
 
-SET search_path TO kayou_naruto;
+SET search_path TO products_list;
 
 CREATE TABLE IF NOT EXISTS products (
     id BIGSERIAL PRIMARY KEY,
@@ -26,10 +27,13 @@ CREATE INDEX IF NOT EXISTS idx_products_name ON products (name);
 CREATE INDEX IF NOT EXISTS idx_products_price ON products (price);
 CREATE INDEX IF NOT EXISTS idx_product_images_product_id ON product_images (product_id);
 
-COMMENT ON TABLE products IS 'Каталог продуктов Kayou Naruto с ценами';
-COMMENT ON TABLE product_images IS 'Бинарные изображения продуктов (BYTEA)';
+COMMENT ON TABLE products IS 'Товары с ценами и ссылками';
+COMMENT ON TABLE product_images IS 'Бинарные изображения товаров (BYTEA)';
 COMMENT ON COLUMN products.name IS 'Наименование (до 20 символов)';
 COMMENT ON COLUMN products.price IS 'Цена';
-COMMENT ON COLUMN products.product_url IS 'Ссылка на продукт (только https)';
+COMMENT ON COLUMN products.product_url IS 'Ссылка на товар (только https)';
 COMMENT ON COLUMN product_images.content IS 'Содержимое файла изображения';
 COMMENT ON COLUMN product_images.content_type IS 'MIME-тип (image/jpeg, image/png и т.д.)';
+
+-- Миграция со старой схемы: URL картинки в products.image_url
+ALTER TABLE products DROP COLUMN IF EXISTS image_url;

@@ -19,7 +19,7 @@ async def root(request: Request):
                     if method != "HEAD":
                         endpoints.append({"method": method, "path": path})
     return {
-        "message": "Kayou Naruto Prices API",
+        "message": "Товары и цены API",
         "endpoints": sorted(endpoints, key=lambda x: (x["path"], x["method"])),
         "total": len(endpoints),
     }

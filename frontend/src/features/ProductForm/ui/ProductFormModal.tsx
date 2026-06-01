@@ -150,7 +150,7 @@ const ProductFormContent = ({
       return `Загружено: ${newImageFile.name}`;
     }
     if (mode === 'edit' && product?.hasImage && uploadFileList.length > 0) {
-      return 'Используется текущее изображение из каталога';
+      return 'Используется текущее изображение товара';
     }
     return null;
   }, [newImageFile, mode, product?.hasImage, uploadFileList.length]);
@@ -164,6 +164,44 @@ const ProductFormContent = ({
         }
       : undefined;
 
+  const imageField = (
+    <Form.Item
+      label="Изображение"
+      required={mode === 'create'}
+      help={mode === 'edit' ? 'Оставьте текущее или загрузите новое' : undefined}
+    >
+      <Upload
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        listType="picture-card"
+        maxCount={1}
+        fileList={uploadFileList}
+        beforeUpload={() => false}
+        onChange={handleUploadChange}
+        onRemove={handleRemove}
+        showUploadList={{ showPreviewIcon: true, showRemoveIcon: true }}
+      >
+        {uploadFileList.length === 0 && (
+          <div className="product-form-modal__upload-placeholder">
+            <BiImageAdd size={24} />
+            <span>Загрузить</span>
+          </div>
+        )}
+      </Upload>
+      {uploadStatusText && (
+        <p
+          className={
+            newImageFile
+              ? 'product-form-modal__upload-status product-form-modal__upload-status--new'
+              : 'product-form-modal__upload-status'
+          }
+        >
+          {newImageFile && <BiCheckCircle size={16} aria-hidden />}
+          {uploadStatusText}
+        </p>
+      )}
+    </Form.Item>
+  );
+
   return (
     <Form
       form={form}
@@ -172,41 +210,6 @@ const ProductFormContent = ({
       initialValues={initialValues}
     >
       <Form.Item
-        label="Изображение"
-        required={mode === 'create'}
-        help={mode === 'edit' ? 'Оставьте текущее или загрузите новое' : undefined}
-      >
-        <Upload
-          accept="image/jpeg,image/png,image/webp,image/gif"
-          listType="picture-card"
-          maxCount={1}
-          fileList={uploadFileList}
-          beforeUpload={() => false}
-          onChange={handleUploadChange}
-          onRemove={handleRemove}
-          showUploadList={{ showPreviewIcon: true, showRemoveIcon: true }}
-        >
-          {uploadFileList.length === 0 && (
-            <div className="product-form-modal__upload-placeholder">
-              <BiImageAdd size={24} />
-              <span>Загрузить</span>
-            </div>
-          )}
-        </Upload>
-        {uploadStatusText && (
-          <p
-            className={
-              newImageFile
-                ? 'product-form-modal__upload-status product-form-modal__upload-status--new'
-                : 'product-form-modal__upload-status'
-            }
-          >
-            {newImageFile && <BiCheckCircle size={16} aria-hidden />}
-            {uploadStatusText}
-          </p>
-        )}
-      </Form.Item>
-      <Form.Item
         label="Наименование"
         name="name"
         rules={[
@@ -214,13 +217,14 @@ const ProductFormContent = ({
           { max: 20, message: 'Не более 20 символов' },
         ]}
       >
-        <Input maxLength={20} showCount />
+        <Input maxLength={20} showCount autoFocus={mode === 'create'} />
       </Form.Item>
+      {imageField}
       <Form.Item label="Цена, ₽" name="price" rules={[{ required: true, message: 'Укажите цену' }]}>
         <InputNumber min={0} precision={2} className="product-form-modal__price" />
       </Form.Item>
       <Form.Item
-        label="Ссылка на продукт"
+        label="Ссылка на товар"
         name="productUrl"
         rules={[{ required: true, message: 'Укажите ссылку' }, httpsRule]}
       >
@@ -245,12 +249,13 @@ const ProductFormModal = ({
     submitRef.current = submit;
   }, []);
 
-  const title = mode === 'create' ? 'Добавить продукт' : 'Редактировать продукт';
+  const title = mode === 'create' ? 'Добавить товар' : 'Редактировать товар';
 
   return (
     <Modal
       title={title}
       open={open}
+      centered
       onCancel={onCancel}
       onOk={() => void submitRef.current?.()}
       okText={mode === 'create' ? 'Добавить' : 'Сохранить'}
@@ -258,6 +263,7 @@ const ProductFormModal = ({
       confirmLoading={loading}
       destroyOnHidden
       className="product-form-modal"
+      classNames={{ wrapper: 'product-form-modal-wrap' }}
       width={480}
     >
       {open ? (

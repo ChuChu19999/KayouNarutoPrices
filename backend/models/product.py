@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class Product(Base):
-    """Модель продукта Kayou Naruto (соответствует sql/001_create_products.sql)."""
+    """Модель товара в таблице цен (соответствует sql/init.sql)."""
 
     __tablename__ = "products"
     __table_args__ = (
