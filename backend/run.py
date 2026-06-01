@@ -75,6 +75,8 @@ def run_uvicorn_with_colors():
     """
     process = subprocess.Popen(
         [
+            sys.executable,
+            "-m",
             "uvicorn",
             "main:app",
             "--host",
